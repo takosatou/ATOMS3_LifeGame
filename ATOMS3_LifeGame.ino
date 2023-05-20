@@ -81,11 +81,11 @@ void do_life() {
       if (cbuf[ind(x + 1, y + 1)]) ct++;
       int cv = cbuf[ind(x, y)];
       if (cv) { // live
-	dbuf[ind(x, y)] = (ct == 2 || ct == 3)
-	  ? cv < 255 ? (cv + 1) : 255 // live
-	  : 0; // die
+        dbuf[ind(x, y)] = (ct == 2 || ct == 3)
+          ? cv < 255 ? (cv + 1) : 255 // live
+          : 0; // die
       } else { // die
-	dbuf[ind(x, y)] = (ct == 3) ? 1 : 0; // live or die
+        dbuf[ind(x, y)] = (ct == 3) ? 1 : 0; // live or die
       }
     }
   }
@@ -100,17 +100,17 @@ void draw_life() {
   if (sz == 1) {
     for (int y = 0; y < h; y++) {
       for (int x = 0; x < w; x++, cbuf++, dbuf++) {
-	if (*cbuf != *dbuf) {
-	  M5.Lcd.drawPixel(x, y, heatmap[*dbuf]);
-	}
+        if (*cbuf != *dbuf) {
+          M5.Lcd.drawPixel(x, y, heatmap[*dbuf]);
+        }
       }
     }
   } else {
     for (int y = 0; y < h; y++) {
       for (int x = 0; x < w; x++, cbuf++, dbuf++) {
-	if (*cbuf != *dbuf) {
-	  M5.Lcd.fillRect(x * sz, y * sz, sz, sz, heatmap[*dbuf]);
-	}
+        if (*cbuf != *dbuf) {
+          M5.Lcd.fillRect(x * sz, y * sz, sz, sz, heatmap[*dbuf]);
+        }
       }
     }
   }
