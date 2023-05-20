@@ -58,7 +58,7 @@ void init_life() {
   generation = 1;
 }
 
-/* convert coordinate (x mod w, y mod y) to the index of buffer */
+/* convert coordinate (x mod w, y mod h) to the index of buffer */
 inline int ind(int x, int y) {
   return (x + w) % w + (y + h) % h * w;
 }
