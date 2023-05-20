@@ -56,6 +56,7 @@ void init_life() {
   }
   cur = 0;
   generation = 1;
+  M5.Lcd.fillScreen(heatmap[0]);
 }
 
 /* convert coordinate (x mod w, y mod h) to the index of buffer */
@@ -95,16 +96,21 @@ void draw_life() {
   M5.Lcd.startWrite(); // speed up!
 
   unsigned char* cbuf = buf[cur];
+  unsigned char* dbuf = buf[1 - cur];
   if (sz == 1) {
     for (int y = 0; y < h; y++) {
-      for (int x = 0; x < w; x++) {
-	M5.Lcd.drawPixel(x, y, heatmap[*cbuf++]);
+      for (int x = 0; x < w; x++, cbuf++, dbuf++) {
+	if (*cbuf != *dbuf) {
+	  M5.Lcd.drawPixel(x, y, heatmap[*dbuf]);
+	}
       }
     }
   } else {
     for (int y = 0; y < h; y++) {
-      for (int x = 0; x < w; x++) {
-	M5.Lcd.fillRect(x * sz, y * sz, sz, sz, heatmap[*cbuf++]);
+      for (int x = 0; x < w; x++, cbuf++, dbuf++) {
+	if (*cbuf != *dbuf) {
+	  M5.Lcd.fillRect(x * sz, y * sz, sz, sz, heatmap[*dbuf]);
+	}
       }
     }
   }
