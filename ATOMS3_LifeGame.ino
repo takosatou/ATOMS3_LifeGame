@@ -90,6 +90,7 @@ void do_life() {
     }
   }
   generation++;
+  cur = 1 - cur;
 }
 
 void draw_life() {
@@ -101,7 +102,7 @@ void draw_life() {
     for (int y = 0; y < h; y++) {
       for (int x = 0; x < w; x++, cbuf++, dbuf++) {
         if (*cbuf != *dbuf) {
-          M5.Lcd.drawPixel(x, y, heatmap[*dbuf]);
+          M5.Lcd.drawPixel(x, y, heatmap[*cbuf]);
         }
       }
     }
@@ -109,7 +110,7 @@ void draw_life() {
     for (int y = 0; y < h; y++) {
       for (int x = 0; x < w; x++, cbuf++, dbuf++) {
         if (*cbuf != *dbuf) {
-          M5.Lcd.fillRect(x * sz, y * sz, sz, sz, heatmap[*dbuf]);
+          M5.Lcd.fillRect(x * sz, y * sz, sz, sz, heatmap[*cbuf]);
         }
       }
     }
@@ -177,5 +178,4 @@ void loop() {
 
   do_life();
   draw_life();
-  cur = 1 - cur;
 }
