@@ -5,6 +5,7 @@ const int SZ_LIST[] = {4, 2, 1}; // pixel size
 const int W = 128; // max width
 const int H = 128; // max height
 unsigned char buf[2][W * H]; // buffer for two states
+unsigned char history[2][W * H]; // history to detect stable states
 
 int cur_sz = 1; // index of current pixel size
 int sz, w, h;   // current pixel size, width and height
@@ -43,8 +44,8 @@ void init_heatmap() {
 /* initialize current buffer randomly */
 void init_life() {
   sz = SZ_LIST[cur_sz];
-  w = 128 / sz;
-  h = 128 / sz;
+  w = W / sz;
+  h = H / sz;
 
   int i = 0;
   for (int y = 0; y < h; y++) {
@@ -91,6 +92,12 @@ void do_life() {
   }
   generation++;
   cur = 1 - cur;
+}
+
+bool detect_stable() {
+  if (memcmp(history[cur], buf[cur], W * H) == 0) return true;
+  memcpy(history[cur], buf[cur], W * H);
+  return false;
 }
 
 void draw_life() {
@@ -178,4 +185,14 @@ void loop() {
 
   do_life();
   draw_life();
+
+  if (detect_stable()) {
+    char b[25];
+    sprintf(b, "%d", generation);
+    M5.Lcd.setTextColor(WHITE);
+    M5.Lcd.drawString(b, 8, 8, 2);
+    M5.Lcd.drawString("generations", 8, 24, 2);
+    delay(5000);
+    init_life();
+  }
 }
