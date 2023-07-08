@@ -143,6 +143,7 @@ void draw_life() {
 }
 
 enum { IDLE, RUNNING } mode;
+time_t start_time = 0;
 
 void setup() {
   M5.begin(true, true, true, false);
@@ -167,10 +168,11 @@ void setup() {
 void loop() {
   M5.update();
 
-  if (mode == IDLE) {
+  if (mode != RUNNING) {
     generation++;
     // check click to start
-    if (M5.Btn.wasPressed()) {
+    if (M5.Btn.wasPressed() ||
+        (start_time != 0 && time(NULL) >= start_time))  {
       srand(generation);
       init_life();
       mode = RUNNING;
@@ -200,7 +202,7 @@ void loop() {
     M5.Lcd.setTextColor(WHITE);
     M5.Lcd.drawString(b, 8, 8, 2);
     M5.Lcd.drawString("generations", 8, 24, 2);
-    delay(5000);
-    init_life();
+    mode = IDLE;
+    start_time = time(NULL) + 5;
   }
 }
