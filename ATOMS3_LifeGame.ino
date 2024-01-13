@@ -146,11 +146,12 @@ enum { IDLE, RUNNING } mode;
 time_t start_time = 0;
 
 void setup() {
-  M5.begin(true, true, true, false);
+  auto cfg = M5.config();
+  M5.begin(cfg);
   M5.Lcd.begin();
   M5.Lcd.setRotation(2);
   M5.Lcd.fillScreen(M5.Lcd.color565(0, 0, 32));
-  M5.IMU.begin();
+  M5.Imu.begin();
   init_heatmap();
 
   // draw initial screen
@@ -171,7 +172,7 @@ void loop() {
   if (mode != RUNNING) {
     generation++;
     // check click to start
-    if (M5.Btn.wasPressed() ||
+    if (M5.BtnA.wasPressed() ||
         (start_time != 0 && time(NULL) >= start_time))  {
       srand(generation);
       init_life();
@@ -181,14 +182,14 @@ void loop() {
   }
 
   // check click to change the pixel size
-  if (M5.Btn.wasPressed()) {
+  if (M5.BtnA.wasPressed()) {
     cur_sz = (cur_sz + 1) % 3;
     init_life();
   }
 
   // check tilt to reset
   float ax, ay, az;
-  M5.IMU.getAccel(&ax, &ay, &az);
+  M5.Imu.getAccel(&ax, &ay, &az);
   if (ax > 0.5) {
     init_life();
   }
